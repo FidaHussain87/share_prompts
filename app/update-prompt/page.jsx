@@ -36,7 +36,6 @@ const EditPrompt = () => {
     const getPromptDetails = async () => {
       const response = await fetch(`/api/prompt/${promptId}`)
       const data = await response.json()
-      console.log('ok ', data)
       setPost({
         prompt: data.prompt,
         tag: data.tag,

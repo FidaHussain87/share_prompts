@@ -2,14 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Profile from '@components/Profile'
 
 const MyProfile = () => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const id = searchParams.get('id')
-  const name = searchParams.get('name')
   const { data: session } = useSession()
   const [posts, setPosts] = useState([])
   useEffect(() => {
@@ -19,16 +16,8 @@ const MyProfile = () => {
       setPosts(data)
     }
     if (session?.user.id) fetchPost()
-  }, [])
+  }, [session?.user.id])
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const response = await fetch(`/api/prompt/${id}/${name}`)
-      const data = await response.json()
-      setPosts(data)
-    }
-    if (id) fetchPost()
-  }, [id])
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`)
   }
@@ -51,16 +40,8 @@ const MyProfile = () => {
 
   return (
     <Profile
-      name={
-        (session?.user.id || session?.user.id === id) && name == null
-          ? 'My'
-          : name
-      }
-      desc={
-        session?.user.id || session?.user.id === id
-          ? 'Welcome to your personalize profile'
-          : `Welcome to ${name}'s personalized profile page. Explore ${name}'s exceptional prompts and be inspired by the power of their imagination`
-      }
+      name="My"
+      desc="Welcome to your personalized profile page. Share your exceptional prompts and inspire others with the power of your imagination"
       data={posts}
       handleEdit={handleEdit}
       handleDelete={handleDelete}

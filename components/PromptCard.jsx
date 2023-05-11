@@ -18,7 +18,12 @@ const PromptCard = ({ post, handleTagClick, handleEdit, handleDelete }) => {
     }, 3000)
   }
   const handleMultiPrompts = () => {
-    router.push(`/profile?id=${post.creator._id}&name=${post.creator.username}`)
+    if (post.creator._id === session?.user.id) return router.push('/profile')
+    else {
+      router.push(
+        `/profile/users/?id=${post.creator._id}&name=${post.creator.username}`,
+      )
+    }
   }
   return (
     <div className="prompt_card">
