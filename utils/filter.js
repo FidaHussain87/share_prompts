@@ -1,18 +1,12 @@
 export const filterHelper = (data, searchTerm) => {
-  // const searchProperties = ["creator.username", "tag", "prompt"];
-  // const filteredData = data.filter((item) =>
-  //   searchProperties.some((property) =>
-  //     item[property]?.toLowerCase().includes(searchTerm.toLowerCase())
-  //   )
-  // );
-
-  const regex = new RegExp(searchTerm, "i"); // 'i' flag for case-insensitive search
-  return data.filter(
-    (item) =>
-      regex.test(item.creator.username) ||
-      regex.test(item.tag) ||
-      regex.test(item.prompt)
+  const regex = new RegExp(
+    searchTerm.trim().toLowerCase().replace(/\s+/g, "\\s*"),
+    "i"
   );
-  return filteredData;
-  return regex;
+  return data.filter(
+    ({ creator, tag, prompt }) =>
+      regex.test(creator.username.trim().toLowerCase()) ||
+      regex.test(tag.trim().toLowerCase()) ||
+      regex.test(prompt.trim().toLowerCase())
+  );
 };
